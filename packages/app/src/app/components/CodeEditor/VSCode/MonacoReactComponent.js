@@ -5,7 +5,7 @@ import vscode from 'app/vscode';
 import './icon-theme.css';
 import './workbench-theme.css';
 
-// import { setSocketURL } from 'node-services/lib/net';
+// import { setSocketURL } from 'node-services';
 
 function noop() {}
 

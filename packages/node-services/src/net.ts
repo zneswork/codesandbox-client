@@ -6,6 +6,7 @@ const SOCKET_IDENTIFIER = 'node-socket';
 
 export class Socket extends EventEmitter {
   public destroyed = false;
+
   // @ts-ignore
   private encoding: string;
 
@@ -80,8 +81,11 @@ export class Socket extends EventEmitter {
 
 export class Server extends EventEmitter {
   public connected = false;
+
   public closed = false;
+
   private socket: Socket | null = null;
+
   private listenerFunctions: Array<(e: MessageEvent) => void> = [];
 
   listen(listenPath: string, listenCallback?: Function) {
@@ -156,8 +160,11 @@ function blobToBuffer(
 
 export class WebSocketServer extends EventEmitter {
   public connected = false;
+
   public closed = false;
+
   private socket: WebSocket | null = null;
+
   private listenerFunctions: Array<(e: MessageEvent) => void> = [];
 
   constructor(public url: string) {
@@ -211,7 +218,7 @@ export class WebSocketServer extends EventEmitter {
 }
 
 let socketUrl: string = '';
-function setSocketURL(url: string) {
+export function setSocketURL(url: string) {
   socketUrl = url;
 }
 
@@ -223,15 +230,14 @@ function createServerLocal() {
   return new Server();
 }
 
-function createServer(...args: any[]) {
+export function createServer(...args: any[]) {
   if (socketUrl) {
     return createServerWS();
-  } else {
-    return createServerLocal();
   }
+  return createServerLocal();
 }
 
-function createConnection(pipeName: string, cb?: Function) {
+export function createConnection(pipeName: string, cb?: Function) {
   commonPostMessage({
     $type: 'node-server',
     $channel: pipeName,
@@ -250,6 +256,4 @@ function createConnection(pipeName: string, cb?: Function) {
   return socket;
 }
 
-const connect = createConnection;
-
-export { setSocketURL, createServer, createConnection, connect };
+export const connect = createConnection;

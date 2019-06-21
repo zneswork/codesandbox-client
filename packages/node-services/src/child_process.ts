@@ -10,12 +10,12 @@ const isSafari =
   /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
 let DefaultWorker: false | (() => Worker);
-let workerMap: Map<string, false | (() => Worker)> = new Map();
+const workerMap: Map<string, false | (() => Worker)> = new Map();
 
-function addDefaultForkHandler(worker: false | (() => Worker)) {
+export function addDefaultForkHandler(worker: false | (() => Worker)) {
   DefaultWorker = worker;
 }
-function addForkHandler(path: string, worker: false | (() => Worker)) {
+export function addForkHandler(path: string, worker: false | (() => Worker)) {
   workerMap.set(path, worker);
 }
 
@@ -47,7 +47,9 @@ class NullStream extends EventEmitter {
 
 class NullChildProcess extends EventEmitter {
   public stdout: NullStream = new NullStream();
+
   public stderr: NullStream = new NullStream();
+
   public stdin: NullStream = new NullStream();
 
   public kill() {}
@@ -55,7 +57,9 @@ class NullChildProcess extends EventEmitter {
 
 class ChildProcess extends EventEmitter {
   public stdout: Stream;
+
   public stderr: Stream;
+
   public stdin: Stream;
 
   private destroyed = false;
@@ -153,18 +157,16 @@ function getWorkerFromCache(path: string, isDefaultWorker: boolean) {
     if (cachedDefaultWorker) {
       return cachedDefaultWorker;
     }
-  } else {
-    if (cachedWorkers[path]) {
-      const worker = cachedWorkers[path].pop();
+  } else if (cachedWorkers[path]) {
+    const worker = cachedWorkers[path].pop();
 
-      return worker;
-    }
+    return worker;
   }
 
   return undefined;
 }
 
-let sentBroadcasts: Map<string, Array<number>> = new Map();
+const sentBroadcasts: Map<string, Array<number>> = new Map();
 /**
  * Broadcasts a message if it hasn't been sent by this worker/window before
  */
@@ -207,7 +209,11 @@ function handleBroadcast(
   sentBroadcasts.set(path, sentBroadcastsForPath);
 }
 
-function fork(path: string, argv?: string[], processOpts?: IProcessOpts) {
+export function fork(
+  path: string,
+  argv?: string[],
+  processOpts?: IProcessOpts
+) {
   const WorkerConstructor = workerMap.get(path);
   const isDefaultWorker = !WorkerConstructor;
 
@@ -306,7 +312,7 @@ function fork(path: string, argv?: string[], processOpts?: IProcessOpts) {
   return new ChildProcess(worker);
 }
 
-function preloadWorker(path: string) {
+export function preloadWorker(path: string) {
   const WorkerConstructor = workerMap.get(path);
   const isDefaultWorker = !WorkerConstructor;
 
@@ -320,23 +326,14 @@ function preloadWorker(path: string) {
   }
 }
 
-function execFileSync(path: string) {
+export function execFileSync(path: string) {
   if (process.env.NODE_ENV === 'development') {
     debug('EXEC_FILE_SYNC', path);
   }
 }
 
-function execSync(path: string) {
+export function execSync(path: string) {
   if (process.env.NODE_ENV === 'development') {
     debug('EXEC_SYNC', path);
   }
 }
-
-export {
-  addForkHandler,
-  addDefaultForkHandler,
-  preloadWorker,
-  fork,
-  execSync,
-  execFileSync,
-};

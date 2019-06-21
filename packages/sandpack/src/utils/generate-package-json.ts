@@ -1,4 +1,4 @@
-import { IFiles, IFile, IDependencies } from '../manager';
+import { IFiles, IDependencies } from '../manager/types';
 
 export function getPackageJSON(
   dependencies: IDependencies = {},

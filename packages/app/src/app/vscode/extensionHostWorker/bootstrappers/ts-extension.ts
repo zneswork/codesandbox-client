@@ -1,4 +1,4 @@
-import * as child_process from 'node-services/lib/child_process';
+import { child_process } from 'node-services';
 // @ts-ignore
 import SubWorkLoader from 'worker-loader?publicPath=/&name=sub-dynamic-worker.[hash:8].worker.js!./generic-2';
 import { initializeAll } from '../common/global';

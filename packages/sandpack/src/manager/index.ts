@@ -8,72 +8,7 @@ import generatePackageJSON, {
 } from '../utils/generate-package-json';
 import version from '../version';
 
-export interface IManagerOptions {
-  /**
-   * Location of the bundler.
-   */
-  bundlerURL?: string;
-  /**
-   * Width of iframe.
-   */
-  width?: string;
-  /**
-   * Height of iframe.
-   */
-  height?: string;
-  /**
-   * If we should skip the third step: evaluation.
-   */
-  skipEval?: boolean;
-
-  /**
-   * You can pass a custom file resolver that is responsible for resolving files.
-   * We will use this to get all files from the file system.
-   */
-  fileResolver?: {
-    isFile: (path: string) => Promise<boolean>;
-    readFile: (path: string) => Promise<string>;
-  };
-}
-
-export interface IFile {
-  code: string;
-}
-
-export interface IFiles {
-  [path: string]: IFile;
-}
-
-export interface IModules {
-  [path: string]: {
-    code: string;
-    path: string;
-  };
-}
-
-export interface IDependencies {
-  [depName: string]: string;
-}
-
-export interface ISandboxInfo {
-  files: IFiles;
-  dependencies?: IDependencies;
-  entry?: string;
-  /**
-   * What template we use, if not defined we infer the template from the dependencies or files.
-   *
-   * @type {string}
-   */
-  template?: string;
-
-  showOpenInCodeSandbox?: boolean;
-
-  /**
-   * Only use unpkg for fetching the dependencies, no preprocessing. It's slower, but doesn't talk
-   * to AWS.
-   */
-  disableDependencyPreprocessing?: boolean;
-}
+import { IManagerOptions, IModules, ISandboxInfo } from './types';
 
 const BUNDLER_URL =
   process.env.CODESANDBOX_ENV === 'development'
@@ -82,11 +17,17 @@ const BUNDLER_URL =
 
 export default class PreviewManager {
   selector: string | undefined;
+
   element: Element;
+
   iframe: HTMLIFrameElement;
+
   options: IManagerOptions;
+
   listener?: Function;
+
   fileResolverProtocol?: Protocol;
+
   bundlerURL: string;
 
   sandboxInfo: ISandboxInfo;
@@ -126,7 +67,8 @@ export default class PreviewManager {
         case 'initialized': {
           if (this.iframe) {
             if (this.iframe.contentWindow) {
-              registerFrame(this.iframe.contentWindow, BUNDLER_URL);
+              // imported version of registerFrame only takes 1 arg
+              registerFrame(this.iframe.contentWindow /* , BUNDLER_URL */);
 
               if (this.options.fileResolver) {
                 this.fileResolverProtocol = new Protocol(
@@ -134,9 +76,8 @@ export default class PreviewManager {
                   async (data: { m: 'isFile' | 'readFile'; p: string }) => {
                     if (data.m === 'isFile') {
                       return this.options.fileResolver!.isFile(data.p);
-                    } else {
-                      return this.options.fileResolver!.readFile(data.p);
                     }
+                    return this.options.fileResolver!.readFile(data.p);
                   },
                   this.iframe.contentWindow
                 );
@@ -248,10 +189,10 @@ export default class PreviewManager {
       },
     })
       .then(x => x.json())
-      .then((res: { sandbox_id: string }) => ({
-        sandboxId: res.sandbox_id,
-        editorUrl: `https://codesandbox.io/s/${res.sandbox_id}`,
-        embedUrl: `https://codesandbox.io/embed/${res.sandbox_id}`,
+      .then(({ sandbox_id: sandboxId }) => ({
+        sandboxId,
+        editorUrl: `https://codesandbox.io/s/${sandboxId}`,
+        embedUrl: `https://codesandbox.io/embed/${sandboxId}`,
       }));
   }
 

@@ -42,13 +42,13 @@ describe('TestRunner class', () => {
   });
 
   describe('testGlobals', () => {
-    it('returns an object', async () => {
+    it('returns an object', () => {
       const testRunner = new TestRunner();
 
       window.fetch = jest.fn();
       window.localStorage = jest.fn();
 
-      await testRunner.initJSDOM();
+      testRunner.initJSDOM();
 
       const {
         it: _it,
@@ -165,6 +165,7 @@ describe('TestRunner class', () => {
     });
   });
 
+  /*
   describe('transpileTests', () => {
     it('todo');
   });
@@ -172,6 +173,7 @@ describe('TestRunner class', () => {
   describe('runTests', () => {
     it('todo');
   });
+  */
 
   // deprecated
   xdescribe('addResult', () => {
@@ -316,8 +318,8 @@ describe('TestRunner class', () => {
       testRunner.setCurrentDescribe('foo');
       testRunner.addResult({ status: 'fail', name: 'bar' });
 
-      let results = testRunner.reportResults();
-      let { failedMessages } = results;
+      const results = testRunner.reportResults();
+      const { failedMessages } = results;
 
       expect(results).not.toEqual(null);
       expect(failedMessages[0]).toMatch(/FAIL/);

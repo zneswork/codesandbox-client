@@ -1,4 +1,4 @@
-import * as child_process from 'node-services/lib/child_process';
+import { child_process } from 'node-services';
 
 import { initializeAll } from '../common/global';
 
