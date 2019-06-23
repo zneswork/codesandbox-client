@@ -1,21 +1,16 @@
 {
   "name": "node-services",
-  "version": "0.1.0",
-  "main": "dist/index.js",
-  "module": "dist/node-services.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "version": "0.0.0",
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "build:dev": "yarn build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+    "build": "tsc",
+    "build:dev": "yarn build",
+    "start": "tsc --watch -p ./tsconfig.json",
+    "lint": "eslint ./src",
+    "test": "yarn lint && jest -c ./jest.config.js",
+    "test:watch": "jest -c ./jest.config.js --watch",
+    "test:coverage": "jest -c ./jest.config.js && codecov",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
   },
   "dependencies": {
     "constants-browserify": "^1.0.0",
@@ -26,15 +21,11 @@
   },
   "devDependencies": {
     "@types/events": "^1.2.0",
+    "@types/jest": "^24.0.15",
     "@types/node": "^11.10.5",
     "@types/resolve": "^0.0.8",
     "@types/ws": "^6.0.1",
-    "@types/jest": "^24.0.15",
-    "husky": "^2.4.1",
-    "prettier": "^1.18.2",
-    "pretty-quick": "^1.11.1",
-    "tsdx": "^0.7.2",
-    "tslib": "^1.10.0",
-    "typescript": "^3.5.2"
+    "jest": "^24.8.0",
+    "typescript": "3.5.2"
   }
 }

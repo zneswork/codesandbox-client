@@ -1,7 +1,7 @@
 // This is the default worker that will be called if no worker is specified.
 // It's function is to execute the code of the path that's given to it.
 
-import { Module } from 'node-services';
+import { default as Module } from 'node-services/lib/module';
 import resolve from 'resolve';
 import { basename } from 'path';
 import _debug from '@codesandbox/common/lib/utils/debug';

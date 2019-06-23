@@ -26,7 +26,7 @@ import theme from '@codesandbox/common/lib/theme';
 import { isSafari } from '@codesandbox/common/lib/utils/platform';
 
 // eslint-disable-next-line
-import { child_process } from 'node-services';
+import * as child_process from 'node-services/lib/child_process';
 
 import controller from './controller';
 import App from './pages/index';

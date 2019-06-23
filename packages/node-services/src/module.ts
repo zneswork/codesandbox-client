@@ -14,35 +14,29 @@ function updateChildren(
   child: Module,
   scan: boolean
 ) {
-  const children = parent && parent.children;
+  var children = parent && parent.children;
   if (children && !(scan && children.includes(child))) children.push(child);
 }
 
 export default class Module {
   id: string;
-
   exports: any;
-
   parent: Module | undefined;
-
   children: Module[];
-
   filename: string | null;
-
   loaded: boolean;
-
   static _extensions: {
     [ext: string]: Function;
   } = {
-    '.js': function(module: Module, filename: string) {
+    ['.js']: function(module: Module, filename: string) {
       const fs = BrowserFS.BFSRequire('fs');
-      const content = fs.readFileSync(filename, 'utf8');
+      var content = fs.readFileSync(filename, 'utf8');
 
       module._compile(content, filename);
     },
-    '.json': function(module: Module, filename: string) {
+    ['.json']: function(module: Module, filename: string) {
       const fs = BrowserFS.BFSRequire('fs');
-      const content = fs.readFileSync(filename, 'utf8');
+      var content = fs.readFileSync(filename, 'utf8');
 
       try {
         module.exports = JSON.parse(content);
@@ -90,7 +84,7 @@ export default class Module {
   }
 
   _compile(content: string, filename: string) {
-    const _self = this;
+    var _self = this;
     // remove shebang
     content = content.replace(/^\#\!.*/, '');
 
@@ -105,7 +99,7 @@ export default class Module {
     };
 
     const global: any = {
-      require,
+      require: require,
       exports: _self.exports,
       __filename: filename,
       __dirname: path.dirname(filename),
@@ -204,7 +198,6 @@ export default class Module {
             extensionVersion: string,
             key: string
           ) {}
-
           sendTelemetryEvent(
             eventName: string,
             properties?: {
@@ -214,7 +207,6 @@ export default class Module {
               [key: string]: number;
             }
           ) {}
-
           dispose() {}
         },
       };
@@ -291,8 +283,8 @@ export default class Module {
       return BrowserFS.BFSRequire(request);
     }
 
-    const filename = Module._resolveFilename(request, parent);
-    const cachedModule = Module._cache[filename];
+    var filename = Module._resolveFilename(request, parent);
+    var cachedModule = Module._cache[filename];
     if (cachedModule) {
       updateChildren(parent, cachedModule, true);
       return cachedModule.exports;
@@ -306,7 +298,7 @@ export default class Module {
       return getCaller;
     }
 
-    const module = new Module(filename, parent);
+    var module = new Module(filename, parent);
 
     if (isMain) {
       // @ts-ignore
@@ -316,7 +308,7 @@ export default class Module {
 
     Module._cache[filename] = module;
 
-    let threw = true;
+    var threw = true;
     try {
       module.load(filename);
       threw = false;

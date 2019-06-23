@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { child_process, net, Module } from 'node-services';
+import * as child_process from 'node-services/lib/child_process';
+import * as net from 'node-services/lib/net';
+import { default as Module } from 'node-services/lib/module';
 import resolve from 'resolve';
 
 const { VSCODE_METADATA, MONACO_METADATA } = require('./metadata');
