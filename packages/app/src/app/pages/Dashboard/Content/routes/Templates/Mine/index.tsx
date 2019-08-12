@@ -9,13 +9,12 @@ import ContextMenu from 'app/components/ContextMenu';
 import CustomTemplate from '@codesandbox/common/lib/components/CustomTemplate';
 import { getSandboxName } from '@codesandbox/common/lib/utils/get-sandbox-name';
 
-import { LIST_TEMPLATES, unmakeTemplates } from '../../../queries';
-import { Container, Grid, EmptyTitle } from './elements';
-import { Navigation } from './Navigation';
+import { LIST_TEMPLATES, unmakeTemplates } from '../../../../queries';
+import { Container, Grid, EmptyTitle } from '../elements';
+import { Navigation } from '../Navigation';
 
 export const Templates = props => {
   const teamId = props.match.params.teamId;
-
   const { loading, error, data } = useQuery(LIST_TEMPLATES, {
     variables: { teamId },
   });
