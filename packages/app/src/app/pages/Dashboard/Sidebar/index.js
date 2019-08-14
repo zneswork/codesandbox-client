@@ -88,7 +88,7 @@ class Sidebar extends React.Component {
                       return null;
                     }
 
-                    const teams = data.me.teams;
+                    const teams = (data.me || {}).teams;
 
                     return teams.map(team => (
                       <div key={team.id}>

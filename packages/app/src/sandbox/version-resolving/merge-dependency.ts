@@ -1,29 +1,29 @@
 import { uniq } from 'lodash-es';
 import * as semver from 'semver';
 
-interface ILambdaResponse {
+export interface ILambdaResponse {
   contents: {
-    [path: string]: string,
+    [path: string]: { content: string };
   };
   dependency: {
-    name: string,
-    version: string,
+    name: string;
+    version: string;
   };
   peerDependencies: {
-    [dep: string]: string,
+    [dep: string]: string;
   };
   dependencyDependencies: {
     [dep: string]: {
-      semver: string,
-      resolved: string,
-      parents: string[],
-      entries: string[],
-    },
+      semver: string;
+      resolved: string;
+      parents: string[];
+      entries: string[];
+    };
   };
   dependencyAliases: {
     [dep: string]: {
-      [dep: string]: string,
-    },
+      [dep: string]: string;
+    };
   };
 }
 
@@ -35,11 +35,11 @@ interface IDepDepInfo {
 }
 
 interface IResponse {
-  contents: { [path: string]: string };
-  dependencies: Array<{ name: string, version: string }>;
+  contents: { [path: string]: { content: string } };
+  dependencies: Array<{ name: string; version: string }>;
   dependencyAliases: { [dep: string]: { [dep: string]: string } };
   dependencyDependencies: {
-    [dep: string]: IDepDepInfo,
+    [dep: string]: IDepDepInfo;
   };
 }
 
@@ -93,6 +93,7 @@ function replaceDependencyInfo(
   depDepName: string,
   newDepDep: IDepDepInfo
 ) {
+  // eslint-disable-next-line
   console.log(
     'Resolving conflict for ' +
       depDepName +
@@ -111,6 +112,7 @@ function replaceDependencyInfo(
   r.dependencyDependencies[newPath] = r.dependencyDependencies[depDepName];
   delete r.dependencyDependencies[depDepName];
 
+  // eslint-disable-next-line
   for (const n of Object.keys(r.dependencyDependencies)) {
     r.dependencyDependencies[n].parents = r.dependencyDependencies[
       n

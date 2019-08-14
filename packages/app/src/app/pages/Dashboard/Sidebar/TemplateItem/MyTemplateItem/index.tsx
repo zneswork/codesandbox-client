@@ -6,8 +6,8 @@ import TemplateIcon from '-!svg-react-loader!@codesandbox/common/lib/icons/templ
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-import Item from '../Item';
-import { MAKE_TEMPLATE_DROP_KEY } from '../../Content/SandboxCard';
+import Item from '../../Item';
+import { MAKE_TEMPLATE_DROP_KEY } from '../../../Content/SandboxCard';
 
 interface Props {
   currentPath: string;
@@ -76,7 +76,7 @@ export function collectTarget(connectMonitor, monitor) {
   };
 }
 
-export const TemplateItem = inject('store', 'signals')(
+export const MyTemplateItem = inject('store', 'signals')(
   DropTarget(['SANDBOX'], entryTarget, collectTarget)(
     withRouter(observer(TemplateItemComponent))
   )
