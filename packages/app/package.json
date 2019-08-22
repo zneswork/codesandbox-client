@@ -14,6 +14,7 @@
     "start:dev_api": "node scripts/start.js",
     "start:test": "cross-env LOCAL_SERVER=1 SANDBOX_ONLY=true node scripts/start.js",
     "build": "cross-env NODE_ENV=production node scripts/build.js",
+    "generate": "graphql-codegen --config ./scripts/codegen.js",
     "build:embed": "cross-env NODE_ENV=production webpack --config config/webpack.embed.js",
     "build:sandbox": "cross-env NODE_ENV=production SANDBOX_ONLY=true node scripts/build.js",
     "build:clean": "rimraf www",
@@ -42,6 +43,10 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@graphql-codegen/cli": "^1.6.1",
+    "@graphql-codegen/fragment-matcher": "^1.6.1",
+    "@graphql-codegen/typescript": "^1.6.1",
+    "@graphql-codegen/typescript-graphql-files-modules": "^1.6.1",
     "@types/codemirror": "^0.0.72",
     "@types/debug": "^4.1.1",
     "@types/graphql": "^14.2.3",
@@ -133,7 +138,7 @@
     "worker-loader": "2.0.0"
   },
   "dependencies": {
-    "@apollo/react-hooks": "^0.1.0-beta.2",
+    "@apollo/react-hooks": "^3.0.1",
     "@babel/plugin-transform-destructuring": "^7.1.2",
     "@babel/preset-env": "^7.4.2",
     "@cerebral/http": "^4.0.0",
