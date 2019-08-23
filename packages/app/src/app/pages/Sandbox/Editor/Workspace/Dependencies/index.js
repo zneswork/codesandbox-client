@@ -9,7 +9,9 @@ import { WorkspaceSubtitle } from '../elements';
 import AddVersion from './AddVersion';
 import VersionEntry from './VersionEntry';
 import AddResource from './AddResource';
+import AddFont from './AddFont';
 import ExternalResource from './ExternalResource';
+import ExternalFonts from './ExternalFonts';
 
 import { ErrorMessage } from './elements';
 
@@ -37,6 +39,12 @@ const Dependencies = inject('store', 'signals')(
       // const devDependencies = parsed.devDependencies || {};
 
       const templateDefinition = getDefinition(sandbox.template);
+      const fonts = sandbox.externalResources.filter(resource =>
+        resource.includes('fonts.googleapis')
+      );
+      const otherResources = sandbox.externalResources.filter(
+        resource => !resource.includes('fonts.googleapis')
+      );
 
       return (
         <div>
@@ -83,7 +91,7 @@ const Dependencies = inject('store', 'signals')(
           {templateDefinition.externalResourcesEnabled && (
             <div>
               <WorkspaceSubtitle>External Resources</WorkspaceSubtitle>
-              {(sandbox.externalResources || []).map(resource => (
+              {(otherResources || []).map(resource => (
                 <ExternalResource
                   key={resource}
                   resource={resource}
@@ -95,6 +103,25 @@ const Dependencies = inject('store', 'signals')(
                 />
               ))}
               <AddResource
+                addResource={resource =>
+                  workspace.externalResourceAdded({
+                    resource,
+                  })
+                }
+              />
+              <WorkspaceSubtitle>Google Fonts</WorkspaceSubtitle>
+              {(fonts || []).map(resource => (
+                <ExternalFonts
+                  key={resource}
+                  resource={resource}
+                  removeResource={() =>
+                    workspace.externalResourceRemoved({
+                      resource,
+                    })
+                  }
+                />
+              ))}
+              <AddFont
                 addResource={resource =>
                   workspace.externalResourceAdded({
                     resource,
