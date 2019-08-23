@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, IButtonProps } from '../Button';
-import { Wrapper, Loader } from './elements';
+import { Loader, RelativeButton } from './elements';
 
 interface IProgressButtonProps extends IButtonProps {
   loading?: boolean;
@@ -9,12 +9,13 @@ interface IProgressButtonProps extends IButtonProps {
 const ProgressButton: React.FC<IProgressButtonProps> = ({
   loading = false,
   disabled = false,
+  children,
   ...props
 }) => (
-  <Wrapper>
-    <Button disabled={disabled || loading} {...props} />
+  <RelativeButton disabled={disabled || loading} {...props}>
+    {children}
     {loading && <Loader />}
-  </Wrapper>
+  </RelativeButton>
 );
 
 export default ProgressButton;

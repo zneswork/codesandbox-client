@@ -1,15 +1,12 @@
-import VERSION from '@codesandbox/common/lib/version';
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 //  Fix css prop types in styled-components (see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/31245#issuecomment-463640878)
 import * as CSSProps from 'styled-components/cssprop'; // eslint-disable-line
-
-import SocialInfo from 'app/components/SocialInfo';
-import { useStore } from 'app/store';
+import VERSION from '@codesandbox/common/lib/version';
+import { inject, hooksObserver } from 'app/componentConnectors';
+import { SocialInfo } from 'app/components/SocialInfo';
 import getWorkspaceItems, {
   getDisabledItems,
 } from 'app/store/modules/workspace/items';
-
 import ConfigurationFiles from './items/ConfigurationFiles';
 import { Deployment } from './items/Deployment';
 import Files from './items/Files';
@@ -19,7 +16,6 @@ import { More } from './items/More';
 import { NotOwnedSandboxInfo } from './items/NotOwnedSandboxInfo';
 import { ProjectInfo } from './items/ProjectInfo';
 import Server from './items/Server';
-
 import { Advertisement } from './Advertisement';
 import Chat from './Chat';
 import { ConnectionNotice } from './ConnectionNotice';
@@ -44,8 +40,7 @@ const workspaceTabs = {
   more: More,
 };
 
-const Workspace = () => {
-  const store = useStore();
+const Workspace = ({ store }) => {
   const {
     editor: {
       currentSandbox: { owned },
@@ -101,4 +96,4 @@ const Workspace = () => {
   );
 };
 
-export default observer(Workspace);
+export default inject('store')(hooksObserver(Workspace));

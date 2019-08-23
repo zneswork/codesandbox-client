@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '@codesandbox/common/lib/components/Button';
 import MaxWidth from '@codesandbox/common/lib/components/flex/MaxWidth';
 import Margin from '@codesandbox/common/lib/components/spacing/Margin';
@@ -6,13 +7,10 @@ import {
   protocolAndHost,
   gitHubRepoPattern,
 } from '@codesandbox/common/lib/utils/url-generator';
-import React, { useCallback, useEffect, useState } from 'react';
-
+import { inject, hooksObserver } from 'app/componentConnectors';
+import { Title } from 'app/components/Title';
+import { SubTitle } from 'app/components/SubTitle';
 import Navigation from 'app/pages/common/Navigation';
-import Title from 'app/components/Title';
-import SubTitle from 'app/components/SubTitle';
-import { useSignals } from 'app/store';
-
 import {
   Container,
   Content,
@@ -25,9 +23,7 @@ import {
 const getFullGitHubUrl = url =>
   `${protocolAndHost()}${gitHubToSandboxUrl(url)}`;
 
-const GitHub = () => {
-  const { githubPageMounted } = useSignals();
-
+const GitHub = ({ signals: { githubPageMounted } }) => {
   const [error, setError] = useState(null);
   const [transformedUrl, setTransformedUrl] = useState('');
   const [url, setUrl] = useState('');
@@ -114,4 +110,4 @@ const GitHub = () => {
   );
 };
 
-export default GitHub;
+export default inject('signals')(hooksObserver(GitHub));

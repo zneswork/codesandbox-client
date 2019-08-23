@@ -21,15 +21,42 @@ function getSentry() {
   return import(/* webpackChunkName: 'sentry' */ '@sentry/browser');
 }
 export async function initializeSentry(dsn: string) {
-  const Sentry = await getSentry();
   if (!DNT) {
     sentryInitialized = true;
+    const Sentry = await getSentry();
 
     return Sentry.init({
       dsn,
       release: VERSION,
+      ignoreErrors: [
+        'Custom Object', // Called for errors coming from sandbox (https://sentry.io/organizations/codesandbox/issues/965255074/?project=155188&query=is%3Aunresolved&statsPeriod=14d)
+        'TypeScript Server Error', // Called from the TSC server
+        /^Canceled$/, // Used by VSCode to stop currently running actions
+      ],
+      /**
+       * Don't send messages from the sandbox, so don't send from eg.
+       * new.codesandbox.io or new.csb.app
+       */
+      blacklistUrls: [/.*\.codesandbox\.io/, /.*\.csb\.app/],
+      beforeSend: event => {
+        if (
+          event.stacktrace.frames[0] &&
+          event.stacktrace.frames[0].filename.endsWith(
+            'codesandbox.editor.main.js'
+          )
+        ) {
+          // This is the spammy event that doesn't do anything: https://sentry.io/organizations/codesandbox/issues/1054971728/?project=155188&query=is%3Aunresolved
+          // Don't do anything with it right now, I can't seem to reproduce it for some reason.
+          // We need to add sourcemaps
+          return undefined;
+        }
+
+        return event;
+      },
     });
   }
+
+  return Promise.resolve();
 }
 
 export async function logError(err: Error) {
@@ -134,6 +161,23 @@ const isAllowedEvent = (eventName, secondArg) => {
   }
 };
 
+// After 30min no event we mark a session
+const NEW_SESSION_TIME = 1000 * 60 * 30;
+
+const getLastTimeEventSent = () => {
+  const lastTime = localStorage.getItem('csb-last-event-sent');
+
+  if (lastTime === null) {
+    return 0;
+  }
+
+  return +lastTime;
+};
+
+const markLastTimeEventSent = () => {
+  localStorage.setItem('csb-last-event-sent', Date.now().toString());
+};
+
 export default function track(eventName, secondArg: Object = {}) {
   try {
     if (!DNT && isAllowedEvent(eventName, secondArg)) {
@@ -151,6 +195,13 @@ export default function track(eventName, secondArg: Object = {}) {
       }
       try {
         if (typeof global.amplitude !== 'undefined') {
+          const currentTime = Date.now();
+          if (currentTime - getLastTimeEventSent() > NEW_SESSION_TIME) {
+            // We send a separate New Session event if people have been inactive for a while
+            global.amplitude.logEvent('New Session');
+          }
+          markLastTimeEventSent();
+
           debug('[Amplitude] Tracking', eventName, data);
           global.amplitude.logEvent(eventName, data);
         }
