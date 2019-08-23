@@ -15,7 +15,7 @@ export default () => {
         {editActions}
       </ItemTitle>
       <Files setEditActions={setEditActions} />
-      <WorkspaceItem defaultOpen title="Dependencies">
+      <WorkspaceItem defaultOpen showOverflow title="Dependencies">
         <Dependencies />
       </WorkspaceItem>
     </div>

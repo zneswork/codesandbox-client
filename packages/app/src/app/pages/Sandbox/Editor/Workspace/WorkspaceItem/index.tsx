@@ -70,6 +70,7 @@ export default class WorkspaceItem extends React.Component<Props, State> {
           transitionOnMount
           start={{
             height: 0, // The starting style for the component.
+
             // If the 'leave' prop isn't defined, 'start' is reused!
           }}
           show={open}
