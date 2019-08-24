@@ -11,7 +11,6 @@ interface PatronStarProps {
 }
 
 export function PatronStar({ subscriptionSince, ...props }: PatronStarProps) {
-  console.log(subscriptionSince);
   return (
     <Tooltip
       content={`Patron since ${format(
