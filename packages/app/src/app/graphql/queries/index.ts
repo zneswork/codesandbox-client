@@ -1,4 +1,4 @@
-export { DeleteSandboxes } from './DeleteSandboxes.gql';
+export { DeletedSandboxes } from './DeletedSandboxes.gql';
 export { GetTeam } from './GetTeam.gql';
 export { ListTemplates } from './ListTemplates.gql';
 export { PathedSandboxes } from './PathedSandboxes.gql';
