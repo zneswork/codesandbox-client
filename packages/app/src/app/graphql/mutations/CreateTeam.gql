@@ -1,0 +1,7 @@
+#import "../fragments/Team.gql"
+
+mutation CreateTeam($name: String!) {
+  createTeam(name: $name) {
+    ...Team
+  }
+}

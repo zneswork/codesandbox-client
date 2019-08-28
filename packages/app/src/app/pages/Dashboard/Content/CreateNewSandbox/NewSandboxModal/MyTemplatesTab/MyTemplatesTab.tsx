@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import Template from '@codesandbox/common/lib/components/Template';
-import { LIST_TEMPLATES } from '../../../../queries';
+import { ListTemplates } from 'app/graphql/queries';
 import { Templates } from '../elements';
 import { Empty, Title } from './elements';
 
@@ -12,7 +12,7 @@ interface ListTemplatesResponse {
 }
 
 export const MyTemplatesTab = ({ selectTemplate }) => {
-  const { data = {} } = useQuery<ListTemplatesResponse>(LIST_TEMPLATES, {
+  const { data = {} } = useQuery<ListTemplatesResponse>(ListTemplates, {
     variables: { showAll: true },
     fetchPolicy: 'cache-and-network',
   });

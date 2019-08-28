@@ -1,0 +1,28 @@
+fragment Sandbox on Sandbox {
+  id
+  alias
+  title
+  description
+  insertedAt
+  updatedAt
+  privacy
+  screenshotUrl
+
+  source {
+    template
+  }
+
+  customTemplate {
+    id
+  }
+
+  forkedTemplate {
+    id
+    color
+  }
+
+  collection {
+    path
+    teamId
+  }
+}

@@ -1,0 +1,13 @@
+#import "../fragments/Sandbox.gql"
+
+query DeletedSandboxes {
+  me {
+    sandboxes(
+      showDeleted: true
+      orderBy: { field: "updated_at", direction: DESC }
+    ) {
+      ...Sandbox
+      removedAt
+    }
+  }
+}

@@ -1,9 +1,7 @@
 import React from 'react';
-
 import { Query } from 'react-apollo';
+import { TeamsSidebar } from 'app/graphql/queries';
 import DirectoryComponent from 'app/pages/Dashboard/Sidebar/SandboxesItem';
-
-import { TEAMS_QUERY } from '../../../Dashboard/queries';
 import { TeamContainer, TeamName } from './elements';
 
 export default ({ onSelect, currentPath, currentTeamId }) => (
@@ -16,7 +14,7 @@ export default ({ onSelect, currentPath, currentTeamId }) => (
       teamId={undefined}
     />
 
-    <Query query={TEAMS_QUERY}>
+    <Query query={TeamsSidebar}>
       {({ loading, data, error }) => {
         if (loading) {
           return null;

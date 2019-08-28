@@ -1,0 +1,7 @@
+#import "../fragments/Team.gql"
+
+mutation RevokeTeamInvitation($teamId: ID!, $userId: ID!) {
+  revokeTeamInvitation(teamId: $teamId, userId: $userId) {
+    ...Team
+  }
+}

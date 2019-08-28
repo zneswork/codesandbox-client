@@ -1,0 +1,9 @@
+#import "../fragments/Team.gql"
+
+query GetTeam($id: ID!) {
+  me {
+    team(id: $id) {
+      ...Team
+    }
+  }
+}

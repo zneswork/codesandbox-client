@@ -1,0 +1,7 @@
+#import "../fragments/Sandbox.gql"
+
+mutation SetSandboxesPrivacy($sandboxIds: [ID]!, $privacy: Int!) {
+  setSandboxesPrivacy(sandboxIds: $sandboxIds, privacy: $privacy) {
+    ...Sandbox
+  }
+}

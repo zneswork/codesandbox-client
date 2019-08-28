@@ -1,0 +1,15 @@
+#import "../fragments/Sandbox.gql"
+
+query ListTemplates($teamId: ID, $showAll: Boolean) {
+  me {
+    templates(teamId: $teamId, showAll: $showAll) {
+      color
+      iconUrl
+      id
+      published
+      sandbox {
+        ...Sandbox
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+#import "../fragments/Team.gql"
+
+mutation RejectTeamInvitation($teamId: ID!) {
+  rejectTeamInvitation(teamId: $teamId)
+}

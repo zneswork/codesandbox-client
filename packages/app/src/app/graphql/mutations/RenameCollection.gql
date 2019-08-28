@@ -1,0 +1,17 @@
+#import "../fragments/SidebarCollection.gql"
+
+mutation RenameCollection(
+  $path: String!
+  $newPath: String!
+  $teamId: ID
+  $newTeamId: ID
+) {
+  renameCollection(
+    path: $path
+    newPath: $newPath
+    teamId: $teamId
+    newTeamId: $newTeamId
+  ) {
+    ...SidebarCollection
+  }
+}

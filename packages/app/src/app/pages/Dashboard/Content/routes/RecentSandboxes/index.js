@@ -1,14 +1,10 @@
 import React from 'react';
-import { observer, inject } from 'app/componentConnectors';
-
 import { Query } from 'react-apollo';
-
+import { observer, inject } from 'app/componentConnectors';
+import { RecentSandboxes as RecentSandboxesQuery } from 'app/graphql/queries';
 import getMostUsedTemplate from '../../../utils/get-most-used-template';
-
 import Sandboxes from '../../Sandboxes';
-
 import CreateNewSandbox from '../../CreateNewSandbox';
-import { RECENT_SANDBOXES_CONTENT_QUERY } from '../../../queries';
 
 const RecentSandboxes = ({ store }) => {
   document.title = 'Recent Sandboxes - CodeSandbox';
@@ -18,7 +14,7 @@ const RecentSandboxes = ({ store }) => {
         orderField: store.dashboard.orderBy.field,
         orderDirection: store.dashboard.orderBy.order.toUpperCase(),
       }}
-      query={RECENT_SANDBOXES_CONTENT_QUERY}
+      query={RecentSandboxesQuery}
     >
       {({ loading, error, data }) => {
         if (error) {

@@ -1,0 +1,8 @@
+query TeamsSidebar {
+  me {
+    teams {
+      id
+      name
+    }
+  }
+}

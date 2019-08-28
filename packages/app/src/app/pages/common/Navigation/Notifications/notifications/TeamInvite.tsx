@@ -1,17 +1,15 @@
 import React from 'react';
-
 import { Mutation } from 'react-apollo';
-import history from 'app/utils/history';
 import { teamOverviewUrl } from '@codesandbox/common/lib/utils/url-generator';
 import track from '@codesandbox/common/lib/utils/analytics';
 import { inject, hooksObserver } from 'app/componentConnectors';
-
+import {
+  RejectTeamInvitation,
+  AcceptTeamInvitation,
+} from 'app/graphql/mutations';
+import history from 'app/utils/history';
 import { NotificationImage as Image } from '../elements';
 import { Container, Buttons, Button, W } from './elements';
-import {
-  REJECT_TEAM_INVITATION,
-  ACCEPT_TEAM_INVITATION,
-} from '../../../../Dashboard/queries';
 
 interface Props {
   read: boolean;
@@ -42,7 +40,7 @@ const TeamInvite = inject('signals')(
           <Buttons>
             <Mutation
               variables={{ teamId }}
-              mutation={REJECT_TEAM_INVITATION}
+              mutation={RejectTeamInvitation}
               refetchQueries={['RecentNotifications']}
               onCompleted={() => {
                 track('Team - Invitation Rejected');
@@ -60,7 +58,7 @@ const TeamInvite = inject('signals')(
             </Mutation>
             <Mutation
               variables={{ teamId }}
-              mutation={ACCEPT_TEAM_INVITATION}
+              mutation={AcceptTeamInvitation}
               refetchQueries={['RecentNotifications', 'TeamsSidebar']}
               onCompleted={() => {
                 track('Team - Invitation Accepted');

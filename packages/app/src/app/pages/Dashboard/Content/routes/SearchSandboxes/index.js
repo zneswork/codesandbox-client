@@ -1,18 +1,16 @@
 import React from 'react';
-import { Observer } from 'app/componentConnectors';
 import { Query } from 'react-apollo';
 import Fuse from 'fuse.js';
-
+import { Observer } from 'app/componentConnectors';
+import { SearchSandboxes as SearchSandboxesQuery } from 'app/graphql/queries';
 import Sandboxes from '../../Sandboxes';
-
-import { SEARCH_SANDBOXES_QUERY } from '../../../queries';
 import { getPossibleTemplates } from '../../Sandboxes/utils';
 
 let lastSandboxes = null;
 let searchIndex = null;
 
 const SearchSandboxes = () => (
-  <Query query={SEARCH_SANDBOXES_QUERY}>
+  <Query query={SearchSandboxesQuery}>
     {({ loading, error, data }) => (
       <Observer>
         {({ store }) => {

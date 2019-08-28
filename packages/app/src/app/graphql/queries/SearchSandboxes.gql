@@ -1,0 +1,9 @@
+#import "../fragments/Sandbox.gql"
+
+query SearchSandboxes {
+  me {
+    sandboxes(orderBy: { field: "updated_at", direction: DESC }) {
+      ...Sandbox
+    }
+  }
+}

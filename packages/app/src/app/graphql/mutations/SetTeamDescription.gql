@@ -1,0 +1,7 @@
+#import "../fragments/Team.gql"
+
+mutation SetTeamDescription($teamId: ID!, $description: String!) {
+  SetTeamDescription(teamId: $teamId, description: $description) {
+    ...Team
+  }
+}

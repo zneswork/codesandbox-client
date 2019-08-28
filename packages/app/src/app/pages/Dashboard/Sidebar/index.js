@@ -1,23 +1,20 @@
 import React from 'react';
-import history from 'app/utils/history';
-import { inject, observer } from 'app/componentConnectors';
 import { Route, withRouter } from 'react-router-dom';
 import { Query } from 'react-apollo';
+import PeopleIcon from 'react-icons/lib/md/people';
 import Input from '@codesandbox/common/lib/components/Input';
 import { Button } from '@codesandbox/common/lib/components/Button';
-import PeopleIcon from 'react-icons/lib/md/people';
-
 // @ts-ignore
 import DashboardIcon from '-!svg-react-loader!@codesandbox/common/lib/icons/dashboard.svg';
-
 import { teamOverviewUrl } from '@codesandbox/common/lib/utils/url-generator';
-
+import { inject, observer } from 'app/componentConnectors';
+import { TeamsSidebar } from 'app/graphql/queries';
+import history from 'app/utils/history';
 import Item from './Item';
 import SandboxesItem from './SandboxesItem';
+import { TemplateItem } from './TemplateItem';
 import TrashItem from './TrashItem';
 import { Items, CategoryHeader, SidebarStyled, InputWrapper } from './elements';
-import { TEAMS_QUERY } from '../queries';
-import { TemplateItem } from './TemplateItem';
 
 class Sidebar extends React.Component {
   handleSearchFocus = () => {
@@ -78,7 +75,7 @@ class Sidebar extends React.Component {
                   <TrashItem currentPath={path} />
                 </Items>
 
-                <Query query={TEAMS_QUERY}>
+                <Query query={TeamsSidebar}>
                   {({ loading, data, error }) => {
                     if (loading) {
                       return null;

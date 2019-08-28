@@ -1,15 +1,14 @@
 import React from 'react';
-import { Observer } from 'app/componentConnectors';
 import { Query } from 'react-apollo';
 import { basename } from 'path';
+import { Observer } from 'app/componentConnectors';
+import { PathedSandboxes as PathedSandboxesQuery } from 'app/graphql/queries';
+import getMostUsedTemplate from '../../../utils/get-most-used-template';
+import { getPossibleTemplates } from '../../Sandboxes/utils';
 import Sandboxes from '../../Sandboxes';
+import CreateNewSandbox from '../../CreateNewSandbox';
 import Navigation from './Navigation';
 // import Folders from './Folders';
-import CreateNewSandbox from '../../CreateNewSandbox';
-import getMostUsedTemplate from '../../../utils/get-most-used-template';
-
-import { PATHED_SANDBOXES_CONTENT_QUERY } from '../../../queries';
-import { getPossibleTemplates } from '../../Sandboxes/utils';
 
 const PathedSandboxes = props => {
   const path = '/' + decodeURIComponent(props.match.params.path || '');
@@ -17,7 +16,7 @@ const PathedSandboxes = props => {
 
   document.title = `${basename(path) || 'Dashboard'} - CodeSandbox`;
   return (
-    <Query query={PATHED_SANDBOXES_CONTENT_QUERY} variables={{ path, teamId }}>
+    <Query query={PathedSandboxesQuery} variables={{ path, teamId }}>
       {({ loading, error, data }) => (
         <Observer>
           {({ store }) => {

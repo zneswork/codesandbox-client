@@ -1,15 +1,20 @@
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { Observer } from 'app/componentConnectors';
 import { sortBy } from 'lodash-es';
-
 import { UserWithAvatar } from '@codesandbox/common/lib/components/UserWithAvatar';
 import { Button } from '@codesandbox/common/lib/components/Button';
 import AutosizeTextArea from '@codesandbox/common/lib/components/AutosizeTextArea';
 import Margin from '@codesandbox/common/lib/components/spacing/Margin';
 import track from '@codesandbox/common/lib/utils/analytics';
-
+import { Observer } from 'app/componentConnectors';
+import {
+  RevokeTeamInvitation,
+  SetTeamDescription,
+} from 'app/graphql/mutations';
+import { GetTeam } from 'app/graphql/queries';
 import { Container, HeaderContainer, Description } from '../../elements';
+import AddTeamMember from './AddTeamMember';
+import RemoveTeamMember from './RemoveTeamMember';
 import {
   TeamContainer,
   Section,
@@ -17,14 +22,6 @@ import {
   MemberHeader,
   StyledEditIcon,
 } from './elements';
-import {
-  TEAM_QUERY,
-  REVOKE_TEAM_INVITATION,
-  SET_TEAM_DESCRIPTION,
-} from '../../../queries';
-
-import AddTeamMember from './AddTeamMember';
-import RemoveTeamMember from './RemoveTeamMember';
 
 const User = ({ user, rightElement }) => (
   <div
@@ -60,7 +57,7 @@ class TeamView extends React.PureComponent {
 
     return (
       <Container>
-        <Query query={TEAM_QUERY} variables={{ id: teamId }}>
+        <Query query={GetTeam} variables={{ id: teamId }}>
           {({ data, loading, error }) => (
             <Observer>
               {({ store }) => {
@@ -81,7 +78,7 @@ class TeamView extends React.PureComponent {
                       <HeaderContainer>{data.me.team.name}</HeaderContainer>
                       <Description>
                         {this.state.editingDescription ? (
-                          <Mutation mutation={SET_TEAM_DESCRIPTION}>
+                          <Mutation mutation={SetTeamDescription}>
                             {(mutate, { loading: descriptionLoading }) => {
                               let input = null;
 
@@ -205,7 +202,7 @@ class TeamView extends React.PureComponent {
                               {data.me.team.invitees.map(user => (
                                 <Mutation
                                   key={user.username}
-                                  mutation={REVOKE_TEAM_INVITATION}
+                                  mutation={RevokeTeamInvitation}
                                 >
                                   {(mutate, { loading: revokeLoading }) => {
                                     track('Team - Revoke Invitation');

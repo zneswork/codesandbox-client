@@ -1,0 +1,17 @@
+#import "../fragments/SidebarCollection.gql"
+
+mutation AddToCollection(
+  $collectionPath: String!
+  $sandboxIds: [ID]!
+  $teamId: ID
+) {
+  addToCollection(
+    collectionPath: $collectionPath
+    sandboxIds: $sandboxIds
+    teamId: $teamId
+  ) {
+    sandboxes {
+      ...Sandbox
+    }
+  }
+}

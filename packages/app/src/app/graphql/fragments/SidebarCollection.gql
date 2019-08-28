@@ -1,0 +1,4 @@
+fragment SidebarCollection on Collection {
+  id
+  path
+}

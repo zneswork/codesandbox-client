@@ -1,14 +1,11 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
-
 import Tooltip from '@codesandbox/common/lib/components/Tooltip';
-import history from 'app/utils/history';
 import { dashboardUrl } from '@codesandbox/common/lib/utils/url-generator';
 import { NotificationStatus } from '@codesandbox/notifications';
 import { notificationState } from '@codesandbox/common/lib/utils/notifications';
-
-import { REMOVE_FROM_TEAM, LEAVE_TEAM } from '../../../../queries';
-
+import { RemoveFromTeam, LeaveTeam } from 'app/graphql/mutations';
+import history from 'app/utils/history';
 import { StyledCrossIcon } from '../elements';
 
 export default ({
@@ -49,7 +46,7 @@ export default ({
       >
         <Mutation
           variables={isOwnUser ? { teamId } : { teamId, userId }}
-          mutation={isOwnUser ? LEAVE_TEAM : REMOVE_FROM_TEAM}
+          mutation={isOwnUser ? LeaveTeam : RemoveFromTeam}
           refetchQueries={isOwnUser ? ['TeamsSidebar'] : []}
           onCompleted={() => {
             notificationState.addNotification({

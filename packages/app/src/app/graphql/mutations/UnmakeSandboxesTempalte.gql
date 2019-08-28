@@ -1,0 +1,5 @@
+mutation UnmakeSandboxesTemplate($sandboxIds: [ID]!) {
+  unmakeSandboxesTemplates(sandboxIds: $sandboxIds) {
+    id
+  }
+}

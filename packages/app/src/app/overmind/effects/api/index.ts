@@ -21,7 +21,7 @@ import {
 } from '@codesandbox/common/lib/types';
 import { TemplateType } from '@codesandbox/common/lib/templates';
 import { client } from 'app/graphql/client';
-import { LIST_TEMPLATES } from 'app/pages/Dashboard/queries';
+import { ListTemplates } from 'app/graphql/queries';
 
 let api: Api;
 
@@ -373,6 +373,6 @@ export default {
     return api.delete(`/users/current_user/integrations/github`);
   },
   preloadTemplates() {
-    client.query({ query: LIST_TEMPLATES, variables: { showAll: true } });
+    client.query({ query: ListTemplates, variables: { showAll: true } });
   },
 };

@@ -2,22 +2,19 @@
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import history from 'app/utils/history';
-import { sandboxUrl } from '@codesandbox/common/lib/utils/url-generator';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Mutation } from 'react-apollo';
 import TrashIcon from 'react-icons/lib/md/delete';
-
 import Unlisted from 'react-icons/lib/md/insert-link';
 import Private from 'react-icons/lib/md/lock';
-
 import Input from '@codesandbox/common/lib/components/Input';
 import getTemplate, { TemplateType } from '@codesandbox/common/lib/templates';
 import theme from '@codesandbox/common/lib/theme';
 import track from '@codesandbox/common/lib/utils/analytics';
-
 import { ESC, ENTER } from '@codesandbox/common/lib/utils/keycodes';
-import { RENAME_SANDBOX_MUTATION } from '../../queries';
+import { sandboxUrl } from '@codesandbox/common/lib/utils/url-generator';
+import { RenameSandbox } from 'app/graphql/mutations';
 
 import {
   Container,
@@ -527,7 +524,7 @@ class SandboxItem extends React.PureComponent<Props, State> {
                   <div style={{ flex: 1 }}>
                     <div>
                       {this.state.renamingSandbox ? (
-                        <Mutation mutation={RENAME_SANDBOX_MUTATION}>
+                        <Mutation mutation={RenameSandbox}>
                           {mutate => {
                             let input = null;
 

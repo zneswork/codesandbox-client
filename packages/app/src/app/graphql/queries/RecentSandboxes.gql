@@ -1,0 +1,12 @@
+#import "../fragments/Sandbox.gql"
+
+query RecentSandboxes($orderField: String!, $orderDirection: Direction!) {
+  me {
+    sandboxes(
+      limit: 20
+      orderBy: { field: $orderField, direction: $orderDirection }
+    ) {
+      ...Sandbox
+    }
+  }
+}

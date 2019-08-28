@@ -1,0 +1,9 @@
+#import "../fragments/SidebarCollection.gql"
+
+query PathedSandboxesFolders($teamId: ID) {
+  me {
+    collections(teamId: $teamId) {
+      ...SidebarCollection
+    }
+  }
+}

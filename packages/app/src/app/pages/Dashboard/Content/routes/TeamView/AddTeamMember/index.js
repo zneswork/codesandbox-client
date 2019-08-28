@@ -1,14 +1,11 @@
 import React from 'react';
-import { inject, hooksObserver } from 'app/componentConnectors';
-import styled from 'styled-components';
-
 import { Mutation } from 'react-apollo';
-
+import styled from 'styled-components';
 import Input from '@codesandbox/common/lib/components/Input';
 import { Button } from '@codesandbox/common/lib/components/Button';
 import track from '@codesandbox/common/lib/utils/analytics';
-
-import { INVITE_TO_TEAM } from '../../../../queries';
+import { inject, hooksObserver } from 'app/componentConnectors';
+import { InviteToTeam } from 'app/graphql/mutations';
 
 const ErrorMessage = styled.div`
   color: ${props => props.theme.red};
@@ -18,7 +15,7 @@ const ErrorMessage = styled.div`
 `;
 
 const AddTeamMember = ({ teamId, signals }) => (
-  <Mutation mutation={INVITE_TO_TEAM}>
+  <Mutation mutation={InviteToTeam}>
     {(mutate, { loading, error }) => {
       let input = null;
 

@@ -1,21 +1,18 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { DropTarget } from 'react-dnd';
-import AddFolderIcon from 'react-icons/lib/md/create-new-folder';
-import { inject, observer } from 'app/componentConnectors';
 import { Query } from 'react-apollo';
+import AddFolderIcon from 'react-icons/lib/md/create-new-folder';
 import InfoIcon from '-!svg-react-loader!@codesandbox/common/lib/icons/sandbox.svg';
+import { inject, observer } from 'app/componentConnectors';
 import { DelayedAnimation } from 'app/components/DelayedAnimation';
+import { PathedSandboxesFolders } from 'app/graphql/queries';
+import getChildCollections from '../../utils/get-child-collections';
 import Item from '../Item';
-import { Container } from './elements';
 import FolderEntry from './FolderEntry';
 import CreateFolderEntry from './FolderEntry/CreateFolderEntry';
-
 import { entryTarget, collectTarget } from './folder-drop-target';
-
-import getChildCollections from '../../utils/get-child-collections';
-
-import { PATHED_SANDBOXES_FOLDER_QUERY } from '../../queries';
+import { Container } from './elements';
 
 class SandboxesItem extends React.Component {
   state = {
@@ -70,7 +67,7 @@ class SandboxesItem extends React.Component {
             },
           ]}
         >
-          <Query variables={{ teamId }} query={PATHED_SANDBOXES_FOLDER_QUERY}>
+          <Query variables={{ teamId }} query={PathedSandboxesFolders}>
             {({ data, loading, error }) => {
               if (loading) {
                 return (

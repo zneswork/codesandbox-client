@@ -1,43 +1,30 @@
 // @ts-check
 import React from 'react';
-
+import { Mutation } from 'react-apollo';
+import { DropTarget, DragSource } from 'react-dnd';
+import { Animate as ReactShow } from 'react-show';
 import FolderIcon from 'react-icons/lib/md/folder';
 import AddFolderIcon from 'react-icons/lib/md/create-new-folder';
 import RenameIcon from 'react-icons/lib/md/mode-edit';
 import TrashIcon from 'react-icons/lib/md/delete';
-import { Mutation } from 'react-apollo';
-import { DropTarget, DragSource } from 'react-dnd';
-import { inject, observer } from 'app/componentConnectors';
-import track from '@codesandbox/common/lib/utils/analytics';
-import { client } from 'app/graphql/client';
-
-import { Animate as ReactShow } from 'react-show';
 import { join, dirname } from 'path';
-
-import theme from '@codesandbox/common/lib/theme';
-
-import ContextMenu from 'app/components/ContextMenu';
-
 import Input from '@codesandbox/common/lib/components/Input';
+import theme from '@codesandbox/common/lib/theme';
+import track from '@codesandbox/common/lib/utils/analytics';
 import {
   ARROW_LEFT,
   ARROW_RIGHT,
   ESC,
 } from '@codesandbox/common/lib/utils/keycodes';
-
-import { Container, AnimatedChevron, IconContainer } from './elements';
-
+import { client } from 'app/graphql/client';
+import { inject, observer } from 'app/componentConnectors';
+import ContextMenu from 'app/components/ContextMenu';
+import { DeleteCollection, RenameCollection } from 'app/graphql/mutations';
+import { PathedSandboxes, PathedSandboxesFolders } from 'app/graphql/queries';
 import getDirectChildren from '../../../utils/get-direct-children';
 import { entryTarget, collectTarget } from '../folder-drop-target';
-
 import CreateFolderEntry from './CreateFolderEntry';
-
-import {
-  PATHED_SANDBOXES_FOLDER_QUERY,
-  PATHED_SANDBOXES_CONTENT_QUERY,
-  DELETE_FOLDER_MUTATION,
-  RENAME_FOLDER_MUTATION,
-} from '../../../queries';
+import { Container, AnimatedChevron, IconContainer } from './elements';
 
 type Props = {
   name: string;
@@ -158,12 +145,12 @@ class FolderEntry extends React.Component<Props, State> {
         action: () => {
           track('Dashboard - Folder Deleted');
           client.mutate({
-            mutation: DELETE_FOLDER_MUTATION,
+            mutation: DeleteCollection,
             variables: { path, teamId },
 
             refetchQueries: [
               {
-                query: PATHED_SANDBOXES_CONTENT_QUERY,
+                query: PathedSandboxes,
                 variables: { path: '/', teamId },
               },
             ],
@@ -174,12 +161,12 @@ class FolderEntry extends React.Component<Props, State> {
               }
 
               const cacheData = cache.readQuery({
-                query: PATHED_SANDBOXES_FOLDER_QUERY,
+                query: PathedSandboxesFolders,
                 variables,
               });
 
               cache.writeQuery({
-                query: PATHED_SANDBOXES_FOLDER_QUERY,
+                query: PathedSandboxesFolders,
                 variables,
                 data: {
                   ...cacheData,
@@ -244,7 +231,7 @@ class FolderEntry extends React.Component<Props, State> {
                 <FolderIcon />
               </IconContainer>{' '}
               {this.state.renamingDirectory ? (
-                <Mutation mutation={RENAME_FOLDER_MUTATION}>
+                <Mutation mutation={RenameCollection}>
                   {(mutate, { loading }) => {
                     let input;
 
@@ -267,12 +254,12 @@ class FolderEntry extends React.Component<Props, State> {
                           }
 
                           const cacheData: { me: any } = cache.readQuery({
-                            query: PATHED_SANDBOXES_FOLDER_QUERY,
+                            query: PathedSandboxesFolders,
                             variables,
                           });
 
                           cache.writeQuery({
-                            query: PATHED_SANDBOXES_FOLDER_QUERY,
+                            query: PathedSandboxesFolders,
                             data: {
                               ...cacheData,
                               me: {

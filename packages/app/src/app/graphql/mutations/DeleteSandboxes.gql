@@ -1,0 +1,7 @@
+#import "../fragments/Sandbox.gql"
+
+mutation DeleteSandboxes($sandboxIds: [ID]!) {
+  deleteSandboxes(sandboxIds: $sandboxIds) {
+    ...Sandbox
+  }
+}

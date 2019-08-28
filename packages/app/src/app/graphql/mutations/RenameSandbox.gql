@@ -1,0 +1,7 @@
+#import "../fragments/Sandbox.gql"
+
+mutation RenameSandbox($id: [ID]!, $title: String!) {
+  renameSandbox(id: $id, title: $title) {
+    ...Sandbox
+  }
+}

@@ -1,0 +1,17 @@
+#import "../fragments/Sandbox.gql"
+#import "../fragments/SidebarCollection.gql"
+
+query PathedSandboxes($path: String!, $teamId: ID) {
+  me {
+    collections(teamId: $teamId) {
+      ...SidebarCollection
+    }
+    collection(path: $path, teamId: $teamId) {
+      id
+      path
+      sandboxes {
+        ...Sandbox
+      }
+    }
+  }
+}

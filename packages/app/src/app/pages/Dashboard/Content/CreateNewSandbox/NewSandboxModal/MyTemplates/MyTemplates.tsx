@@ -1,9 +1,9 @@
 import React from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import { sandboxUrl } from '@codesandbox/common/lib/utils/url-generator';
 import CustomTemplate from '@codesandbox/common/lib/components/CustomTemplate';
+import { ListTemplates } from 'app/graphql/queries';
 import history from 'app/utils/history';
-import { useQuery } from '@apollo/react-hooks';
-import { LIST_TEMPLATES } from '../../../../queries';
 import { Title } from '../elements';
 import { MyTemplatesList } from './elements';
 
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const MyTemplates = ({ selectTemplate }: Props) => {
-  const { data = {} } = useQuery<ListTemplatesResponse>(LIST_TEMPLATES, {
+  const { data = {} } = useQuery<ListTemplatesResponse>(ListTemplates, {
     variables: { showAll: true },
     fetchPolicy: 'cache-and-network',
   });

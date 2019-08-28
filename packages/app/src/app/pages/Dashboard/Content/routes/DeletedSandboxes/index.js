@@ -1,21 +1,16 @@
 import React from 'react';
-import { Observer } from 'app/componentConnectors';
 import { uniq } from 'lodash-es';
 import { Query } from 'react-apollo';
 import RemoveIcon from 'react-icons/lib/md/highlight-remove';
-
+import { Observer } from 'app/componentConnectors';
+import { DeletedSandboxes as DeletedSandboxesQuery } from 'app/graphql/queries';
 import Sandboxes from '../../Sandboxes';
-
-import { DELETED_SANDBOXES_CONTENT_QUERY } from '../../../queries';
 
 const DeletedSandboxes = () => {
   document.title = 'Deleted Sandboxes - CodeSandbox';
 
   return (
-    <Query
-      fetchPolicy="cache-and-network"
-      query={DELETED_SANDBOXES_CONTENT_QUERY}
-    >
+    <Query fetchPolicy="cache-and-network" query={DeletedSandboxesQuery}>
       {({ loading, error, data }) => (
         <Observer>
           {({ store, signals }) => {

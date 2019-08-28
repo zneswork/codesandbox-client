@@ -1,11 +1,7 @@
 import { client } from 'app/graphql/client';
 import { join, basename } from 'path';
-
-import {
-  ADD_SANDBOXES_TO_FOLDER_MUTATION,
-  RENAME_FOLDER_MUTATION,
-  PATHED_SANDBOXES_CONTENT_QUERY,
-} from '../../queries';
+import { AddToCollection, RenameCollection } from 'app/graphql/mutations';
+import { PathedSandboxes } from 'app/graphql/queries';
 
 function addSandboxesToCollection(props, item) {
   const { path, teamId, store } = props;
@@ -13,7 +9,7 @@ function addSandboxesToCollection(props, item) {
   const selectedSandboxes = store.dashboard.selectedSandboxes;
 
   client.mutate({
-    mutation: ADD_SANDBOXES_TO_FOLDER_MUTATION,
+    mutation: AddToCollection,
     variables: {
       collectionPath: path || '/',
       teamId,
@@ -42,14 +38,14 @@ function addSandboxesToCollection(props, item) {
         }
 
         const cacheData = cache.readQuery({
-          query: PATHED_SANDBOXES_CONTENT_QUERY,
+          query: PathedSandboxes,
           variables,
         });
 
         cacheData.me.collection.sandboxes = addToCollection.sandboxes;
 
         cache.writeQuery({
-          query: PATHED_SANDBOXES_CONTENT_QUERY,
+          query: PathedSandboxes,
           variables,
           data: cacheData,
         });
@@ -68,7 +64,7 @@ function addSandboxesToCollection(props, item) {
         }
 
         const oldFolderCacheData = cache.readQuery({
-          query: PATHED_SANDBOXES_CONTENT_QUERY,
+          query: PathedSandboxes,
           variables,
         });
 
@@ -77,7 +73,7 @@ function addSandboxesToCollection(props, item) {
         );
 
         cache.writeQuery({
-          query: PATHED_SANDBOXES_CONTENT_QUERY,
+          query: PathedSandboxes,
           variables,
           data: oldFolderCacheData,
         });
@@ -89,7 +85,7 @@ function addSandboxesToCollection(props, item) {
 function addFolderToFolder(props, item) {
   const newPath = join(props.path || '/', basename(item.path));
   client.mutate({
-    mutation: RENAME_FOLDER_MUTATION,
+    mutation: RenameCollection,
     refetchQueries: ['PathedSandboxesFolders'],
     variables: {
       path: item.path,

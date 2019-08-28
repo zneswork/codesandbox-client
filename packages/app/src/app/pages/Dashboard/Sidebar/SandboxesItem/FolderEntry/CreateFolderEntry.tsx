@@ -1,21 +1,16 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
-
 import AddFolderIcon from 'react-icons/lib/md/create-new-folder';
 import Input from '@codesandbox/common/lib/components/Input';
 import track from '@codesandbox/common/lib/utils/analytics';
 import { ESC } from '@codesandbox/common/lib/utils/keycodes';
-
+import { CreateCollection } from 'app/graphql/mutations';
+import { PathedSandboxesFolders } from 'app/graphql/queries';
 import {
   CreateDirectoryContainer,
   IconContainer,
   AnimatedChevron,
 } from './elements';
-
-import {
-  PATHED_SANDBOXES_FOLDER_QUERY,
-  CREATE_FOLDER_MUTATION,
-} from '../../../queries';
 
 interface Props {
   basePath: string;
@@ -28,7 +23,7 @@ interface Props {
 export default ({ basePath, teamId, noFocus, close, depth }: Props) => {
   let input;
   return (
-    <Mutation mutation={CREATE_FOLDER_MUTATION}>
+    <Mutation mutation={CreateCollection}>
       {mutate => (
         <form
           onSubmit={e => {
@@ -56,7 +51,7 @@ export default ({ basePath, teamId, noFocus, close, depth }: Props) => {
                 }
                 // Read the data from our cache for this query.
                 const d: { me: any } = proxy.readQuery({
-                  query: PATHED_SANDBOXES_FOLDER_QUERY,
+                  query: PathedSandboxesFolders,
                   variables,
                 });
 
@@ -64,7 +59,7 @@ export default ({ basePath, teamId, noFocus, close, depth }: Props) => {
                 d.me.collections.push(createCollection);
                 // Write our data back to the cache.
                 proxy.writeQuery({
-                  query: PATHED_SANDBOXES_FOLDER_QUERY,
+                  query: PathedSandboxesFolders,
                   variables,
                   data: d,
                 });

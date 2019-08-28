@@ -1,0 +1,7 @@
+#import "../fragments/SidebarCollection.gql"
+
+mutation CreateCollection($path: String!, $teamId: ID) {
+  createCollection(path: $path, teamId: $teamId) {
+    ...SidebarCollection
+  }
+}

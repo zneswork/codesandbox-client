@@ -1,14 +1,15 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
-
 import Input from '@codesandbox/common/lib/components/Input';
 import { Button } from '@codesandbox/common/lib/components/Button';
 import track from '@codesandbox/common/lib/utils/analytics';
-import history from 'app/utils/history';
 import { teamOverviewUrl } from '@codesandbox/common/lib/utils/url-generator';
 import { notificationState } from '@codesandbox/common/lib/utils/notifications';
 import { NotificationStatus } from '@codesandbox/notifications';
-
+import { CreateTeam as CreateTeamMutation } from 'app/graphql/mutations';
+import { TeamsSidebar } from 'app/graphql/queries';
+import history from 'app/utils/history';
+import Plan from './Plan';
 import { Container, Description, HeaderContainer } from '../../elements';
 import {
   Label,
@@ -17,9 +18,6 @@ import {
   PatronInfo,
   QuestionHeader,
 } from './elements';
-import { CREATE_TEAM_MUTATION, TEAMS_QUERY } from '../../../queries';
-
-import Plan from './Plan';
 
 const FREE_POINTS = [
   'Unlimited Users',
@@ -52,7 +50,7 @@ export default class CreateTeam extends React.PureComponent {
           and edit sandboxes that are shared between you and your team members.
         </Description>
 
-        <Mutation mutation={CREATE_TEAM_MUTATION}>
+        <Mutation mutation={CreateTeamMutation}>
           {mutate => {
             const submit = e => {
               e.preventDefault();
@@ -76,14 +74,14 @@ export default class CreateTeam extends React.PureComponent {
                 update: (proxy, { data: { createTeam } }) => {
                   // Read the data from our cache for this query.
                   const d = proxy.readQuery({
-                    query: TEAMS_QUERY,
+                    query: TeamsSidebar,
                   });
 
                   // Add our team from the mutation to the end.
                   d.me.teams.push(createTeam);
                   // Write our data back to the cache.
                   proxy.writeQuery({
-                    query: TEAMS_QUERY,
+                    query: TeamsSidebar,
                     data: d,
                   });
                 },
